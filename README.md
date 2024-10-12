@@ -1,93 +1,127 @@
-<p align="center">
-  <img src="assets/logo/web3js.jpg" width="300" alt="web3.js" />
-</p>
+# omnisharp-roslyn
 
-# Web3.js
+[![Build Status](https://dev.azure.com/omnisharp/Builds/_apis/build/status/OmniSharp.omnisharp-roslyn?branchName=master)](https://dev.azure.com/omnisharp/Builds/_build/latest?definitionId=2&branchName=master)
 
-[![Dependency Status][downloads-image]][npm-url] ![Unit Test Coverage](https://img.shields.io/codecov/c/github/web3/web3.js/4.x?label=unit%20test%20coverage)
-![Commit Activity](https://img.shields.io/github/commit-activity/m/web3/web3.js/4.x?label=commit%20activity%20on%204.x)
-![Contributors](https://img.shields.io/github/contributors/web3/web3.js?label=contributors%20on%20all%20branches)
+## Introduction
 
-![ES Version](https://img.shields.io/badge/ES-2020-yellow)
-![Node Version](https://img.shields.io/badge/node-14.x-green)
+OmniSharp is a .NET development platform based on [Roslyn](https://github.com/dotnet/roslyn) workspaces. It provides project dependencies and C# language services to various IDEs and plugins.
 
-Web3.js is a TypeScript implementation of the [Ethereum JSON RPC API](https://eth.wiki/json-rpc/API) and related tooling maintained by [ChainSafe Systems](https://chainsafe.io).
+OmniSharp is built with the [.NET Core SDK](https://dot.net/) on Windows and [Mono](http://www.mono-project.com/) on OSX/Linux. It targets both the _net6.0_ and _net472_ target frameworks. The _net6.0_ build requires a .NET SDK version _>=6.0_. When using the _net472_ build on OSX/Linux, _Mono_ version _>=6.4.0_ is required and must be globally installed on the system.
 
-## Installation
+For Arch Linux users, you need package [mono-msbuild](https://archlinux.org/packages/extra/x86_64/mono-msbuild/) (>= 16.3).
 
-You can install the package either using [NPM](https://www.npmjs.com/package/web3) or using [Yarn](https://yarnpkg.com/package/web3)
+In addition, if you need the HTTP interface and you want to run on Linux, you'll also need to make sure that you have [libuv](http://libuv.org) installed. See also https://github.com/OmniSharp/omnisharp-roslyn/issues/1202#issuecomment-421543905 .
 
-> If you wanna checkout latest bugfix or feature, use `npm install web3@dev`
+## What's new
 
-### Using NPM
+See our [change log](https://github.com/OmniSharp/omnisharp-roslyn/blob/master/CHANGELOG.md) for all of the updates.
 
-```bash
-npm install web3
+## Using OmniSharp
+
+OmniSharp ships in two flavors:
+
+-   Stdio server
+-   HTTP server
+
+### Downloading OmniSharp
+
+When using OmniSharp with an editor extension (e.g. VIM, Emacs, VS Code), the extension will download or bundle OmniSharp automatically. If you wish to download OmniSharp manually though, follow the steps below.
+
+#### Stable releases
+
+Stable releases are published using [GitHub releases](https://github.com/OmniSharp/omnisharp-roslyn/releases). Each release contains a set of binaries for various operating systems and processing architectures.
+
+#### Pre-releases
+
+Pre-release versions are available in Azure Blob Storage, they can be viewed using the following URL `https://roslynomnisharp.blob.core.windows.net/releases?restype=container&comp=list&prefix={version}`, where the `{version}` placeholder can be found in the [changelog](https://github.com/OmniSharp/omnisharp-roslyn/blob/master/CHANGELOG.md). For example, all `1.37.x` versions (including all betas and prereleases such as `1.37.4-beta.5`) can be viewed using `https://roslynomnisharp.blob.core.windows.net/releases?restype=container&comp=list&prefix=1.37`. Please note that the listing is limited to 5000 entries.
+
+Every merge to `master` is automatically published to this feed and individual release is then available using the following URL convention:
+`https://roslynomnisharp.blob.core.windows.net/releases/{version}/{packagename}-{os/arch}.{ext}`
+
+-   Version is auto incremented and is visible in the travis or appveyor build output
+-   Package Name would be either `omnisharp` or `omnisharp.http`
+-   `os/arch` will be one of the following:
+    -   `win-x64`
+    -   `win-x86`
+    -   `win-arm64`
+    -   `linux-x64`
+    -   `linux-x86`
+    -   `linux-musl-x64`
+    -   `linux-arm64`
+    -   `linux-musl-arm64`
+    -   `osx`
+    -   `mono` (Requires global mono installed)
+-   Extensions are archive specific, windows will be `zip` and all others will be `tar.gz`.
+
+### Building
+
+**On Windows**:
+
+```
+> ./build.ps1
 ```
 
-### Using Yarn
+**On Linux / Unix**:
 
-```bash
-yarn add web3
+```
+$ ./build.sh
 ```
 
-## Getting Started
+You can find the output under `artifacts/publish/OmniSharp/<runtime id>/<target framework>/`.
 
--   :writing_hand: If you have questions [submit an issue](https://github.com/ChainSafe/web3.js/issues/new/choose) or join us on [Discord](https://discord.gg/yjyvFRP)
-    ![Discord](https://img.shields.io/discord/593655374469660673.svg?label=Discord&logo=discord)
+The executable is either `OmniSharp.exe` or `OmniSharp`.
 
-## Prerequisites
+For more details, see [Build](https://github.com/OmniSharp/omnisharp-roslyn/blob/master/BUILD.md).
 
--   :gear: [NodeJS](https://nodejs.org/) (LTS/Fermium)
--   :toolbox: [Yarn](https://yarnpkg.com/)/[Lerna](https://lerna.js.org/)
+### VS Code
 
-## Migration Guide
+Add the following setting to your [User Settings](https://code.visualstudio.com/Docs/customization/userandworkspace).
 
--   [Migration Guide from Web3.js 1.x to 4.x](https://docs.web3js.org/guides/web3_upgrade_guide/index)
-    Breaking changes are listed in migration guide and its first step for migrating from Web3.js 1.x to 4.x. If there is any question or discussion feel free to ask in [Discord](https://discord.gg/yjyvFRP), and in case of any bug or new feature request [open issue](https://github.com/web3/web3.js/issues/new) or create a pull request for [contributions](https://github.com/web3/web3.js/blob/4.x/.github/CONTRIBUTING.md).
+```JSON
+{
+  "omnisharp.path": "<Path to the omnisharp executable>"
+}
+```
 
-## Useful links
+The above option can also be set to:
 
--   [Web3 tree shaking support guide](https://docs.web3js.org/guides/advanced/tree_shaking/)
--   [React App Example](https://github.com/ChainSafe/web3js-example-react-app)
+-   "latest" - To consume the latest build from the master branch
+-   A specific version number like `1.29.2-beta.60`
 
-## Architecture Overview
+In order to be able to attach a debugger, add the following setting to your [User or Workspace settings](https://code.visualstudio.com/Docs/customization/userandworkspace):
 
-| Package                                                                                           | Version                                                                                                                                                                           | License                                                                                                               | Docs                                                                                                           | Description                                                                                                   |
-| ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| [web3](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3)                               | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3%2Fpackage.json)](https://www.npmjs.com/package/web3)                               | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3)                | :rotating_light: Entire Web3.js offering (includes all packages)                                              |
-| [web3-core](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-core)                     | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-core%2Fpackage.json)](https://www.npmjs.com/package/web3-core)                     | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-core)           | Core functions for web3.js packages                                                                           |
-| [web3-errors](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-errors)                 | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-errors%2Fpackage.json)](https://www.npmjs.com/package/web3-core)                   | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-errors)         | Errors Objects                                                                                                |
-| [web3-eth](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-eth)                       | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-eth%2Fpackage.json)](https://www.npmjs.com/package/web3-eth)                       | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-eth)            | Modules to interact with the Ethereum blockchain and smart contracts                                          |
-| [web3-eth-abi](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-eth-abi)               | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-eth-abi%2Fpackage.json)](https://www.npmjs.com/package/web3-eth-abi)               | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-eth-abi)        | Functions for encoding and decoding EVM in/output                                                             |
-| [web3-eth-accounts](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-eth-accounts)     | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-eth-accounts%2Fpackage.json)](https://www.npmjs.com/package/web3-eth-accounts)     | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-eth-accounts)   | Functions for managing Ethereum accounts and signing                                                          |
-| [web3-eth-contract](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-eth-contract)     | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-eth-contract%2Fpackage.json)](https://www.npmjs.com/package/web3-eth-contract)     | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-eth-contract)   | The contract package contained in [web3-eth](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-eth) |
-| [web3-eth-ens](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-eth-ens)               | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-eth-ens%2Fpackage.json)](https://www.npmjs.com/package/web3-eth-ens)               | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-eth-ens)        | Functions for interacting with the Ethereum Name Service                                                      |
-| [web3-eth-iban](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-eth-iban)             | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-eth-iban%2Fpackage.json)](https://www.npmjs.com/package/web3-eth-iban)             | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-eth-iban)       | Functionality for converting Ethereum addressed to IBAN addressed and vice versa                              |
-| [web3-eth-personal](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-eth-personal)     | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-eth-personal%2Fpackage.json)](https://www.npmjs.com/package/web3-eth-personal)     | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-eth-personal)   | Module to interact with the Ethereum blockchain accounts stored in the node                                   |
-| [web3-net](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-net)                       | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-net%2Fpackage.json)](https://www.npmjs.com/package/web3-net)                       | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-net)            | Functions to interact with an Ethereum node's network properties                                              |
-| [web3-providers-http](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-providers-http) | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-providers-http%2Fpackage.json)](https://www.npmjs.com/package/web3-providers-http) | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-providers-http) | Web3.js provider for the HTTP protocol                                                                        |
-| [web3-providers-ipc](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-providers-ipc)   | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-providers-ipc%2Fpackage.json)](https://www.npmjs.com/package/web3-providers-ipc)   | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-providers-ipc)  | Web3.js provider for IPC                                                                                      |
-| [web3-providers-ws](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-providers-ws)     | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-providers-ws%2Fpackage.json)](https://www.npmjs.com/package/web3-providers-ws)     | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-providers-ws)   | Web3.js provider for the Websocket protocol                                                                   |
-| [web3-rpc-methods](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-rpc-methods)       | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-rpc-methods%2Fpackage.json)](https://www.npmjs.com/package/web3-types)             | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/)                    | RPC Methods                                                                                                   |
-| [web3-types](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-types)                   | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-types%2Fpackage.json)](https://www.npmjs.com/package/web3-types)                   | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-types)          | Shared useable types                                                                                          |
-| [web3-utils](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-utils)                   | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-utils%2Fpackage.json)](https://www.npmjs.com/package/web3-utils)                   | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-utils)          | Useful utility functions for Dapp developers                                                                  |
-| [web3-validator](https://github.com/ChainSafe/web3.js/tree/4.x/packages/web3-validator)           | [![npm](https://img.shields.io/github/package-json/v/web3/web3.js/4.x?filename=packages%2Fweb3-validator%2Fpackage.json)](https://www.npmjs.com/package/web3-validator)           | [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) | [![documentation](https://img.shields.io/badge/typedoc-blue)](https://docs.web3js.org/api/web3-validator)      | Utilities for validating objects                                                                              |
+```JSON
+{
+  "omnisharp.waitForDebugger": true
+}
+```
 
-## Package.json Scripts
+This will print the OmniSharp process ID in the VS Code OmniSharp output panel and pause the start of the server until a debugger is attached to this process. This is equivalent to launching OmniSharp from a command line with the `--debug` flag.
 
-| Script                         | Description                                                        |
-| ------------------------------ | ------------------------------------------------------------------ |
-| clean                          | Uses `rimraf` to remove `dist/`                                    |
-| build                          | Uses `tsc` to build all packages                                   |
-| lint                           | Uses `eslint` to lint all packages                                 |
-| lint:fix                       | Uses `eslint` to check and fix any warnings                        |
-| format                         | Uses `prettier` to format the code                                 |
-| test                           | Uses `jest` to run unit tests in each package                      |
-| test:integration               | Uses `jest` to run tests under `/test/integration` in each package |
-| test:unit                      | Uses `jest` to run tests under `/test/unit` in each package        |
-| test:manual:long-connection-ws | Runs manual tests for keeping a long WebSocket connection          |
-| test:manual                    | Runs manual tests under `test/manual` in the web3 package          |
+### Configuration
 
-[npm-url]: https://npmjs.org/package/web3
-[downloads-image]: https://img.shields.io/npm/dm/web3?label=npm%20downloads
+OmniSharp provides a rich set of hierarchical configuration options, controlled via startup arguments, environment variables and `omnisharp.json` file. For more details please visit the [Configuration Options](https://github.com/OmniSharp/omnisharp-roslyn/wiki/Configuration-Options) section of the wiki.
+
+## Help wanted!
+
+We have slack room as well. [Get yourself invited](https://omnisharp.herokuapp.com/): [here](https://omnisharp.herokuapp.com/)
+
+## License
+
+Copyright © .NET Foundation, and contributors.
+
+OmniSharp is provided as-is under the MIT license. For more information see [LICENSE](https://github.com/OmniSharp/omnisharp-roslyn/blob/master/license.md).
+
+## Code of Conduct
+
+This project has adopted the code of conduct defined by the [Contributor Covenant](http://contributor-covenant.org/)
+to clarify expected behavior in our community.
+For more information see the [.NET Foundation Code of Conduct](http://www.dotnetfoundation.org/code-of-conduct).
+
+## Contribution License Agreement
+
+By signing the [CLA](https://cla.dotnetfoundation.org/OmniSharp/omnisharp-roslyn), the community is free to use your contribution to .NET Foundation projects.
+
+## .NET Foundation
+
+This project is supported by the [.NET Foundation](http://www.dotnetfoundation.org).

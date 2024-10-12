@@ -2,17 +2,20 @@
 
 ## Supported Versions
 
-Legacy-compatibility `v1.x`:
+Use this section to tell people about which versions of your project are
+currently being supported with security updates.
 
--   :hourglass_flowing_sand: Web3.js was the previous implementation of the library, written in JavaScript.
-
-Current-implementation `v4.x`:
-
--   :hourglass: Web3.js has undergone a complete refactoring and rewrite.
--   :stop_sign: We encourage **not** using these releases until official stable releases will be announced.
--   :globe_with_meridians: We encourage using the [most recently released version](https://github.com/ChainSafe/web3.js/releases/latest) from the `v1.x` release track before reporting an issue.
+| Version | Supported          |
+| ------- | ------------------ |
+| 5.1.x   | :white_check_mark: |
+| 5.0.x   | :x:                |
+| 4.0.x   | :white_check_mark: |
+| < 4.0   | :x:                |
 
 ## Reporting a Vulnerability
 
--   :rotating_light: Please, send vulnerability reports to `security@chainsafe.io`.
--   :warning: **Please do not file a public ticket** mentioning the vulnerability, as doing so could increase the likelihood of the vulnerability being exploited before a fix has been created, released and installed on the network.
+Use this section to tell people how to report a vulnerability.
+
+Tell them where to go, how often they can expect to get an update on a
+reported vulnerability, what to expect if the vulnerability is accepted or
+declined, etc.
